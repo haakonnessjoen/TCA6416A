@@ -1,5 +1,5 @@
 ###########################################
-# Syntax Coloring Map For Keypad_I2C
+# Syntax Coloring Map For TCA6416A
 ###########################################
 
 ###########################################
@@ -8,9 +8,8 @@
 
 TCA6416A	KEYWORD1
 
-
 ###########################################
-# Keypad_I2C Library constants
+# TCA6416A Library constants
 ###########################################
 
 
@@ -26,7 +25,6 @@ port_write	KEYWORD2
 port_read	KEYWORD2
 mode_write	KEYWORD2
 mode_read	KEYWORD2
-
 
 ###########################################
 # objects created in the example sketches.
