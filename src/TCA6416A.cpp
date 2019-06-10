@@ -74,9 +74,6 @@ uint16_t TCA6416A::port_read() {
 }
 
 void TCA6416A::mode_write(uint16_t modes) {
-	Serial.print("Mode Write ");
-	Serial.println(modes, HEX);
-
 	TW.beginTransmission((int)i2caddr);
 	TW.write(TCAREG_CONFIG0);
 
