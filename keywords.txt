@@ -25,8 +25,3 @@ port_write	KEYWORD2
 port_read	KEYWORD2
 mode_write	KEYWORD2
 mode_read	KEYWORD2
-
-###########################################
-# objects created in the example sketches.
-###########################################
-
