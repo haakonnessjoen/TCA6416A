@@ -23,7 +23,7 @@
 
 class TCA6416A {
 public:
-	void begin(uint8_t address);
+	bool begin(uint8_t addr_pin, TwoWire *theWire = &Wire);
 	void pin_mode(uint8_t pinNum, int mode);
 	void pin_write(uint8_t pinNum, uint8_t level);
 	int  pin_read(uint8_t pinNum);
@@ -33,11 +33,11 @@ public:
 	uint16_t mode_read();
 
 private:
-		TwoWire TW;
-    uint8_t i2caddr;
-    uint8_t i2cwidth;
-		uint16_t pinState;
-		uint16_t pinModes;
+	TwoWire *TW;
+	uint8_t i2caddr;
+	uint8_t i2cwidth;
+	uint16_t pinState;
+	uint16_t pinModes;
 };
 
 #endif // TCA6416A_H

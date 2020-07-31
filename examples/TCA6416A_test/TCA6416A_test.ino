@@ -3,7 +3,13 @@
 TCA6416A pins;
 
 void setup() {
-	pins.begin(0); // Address 0 or 1, depending on your addr-pin
+	Serial.begin(115200);
+	while (!Serial);
+
+	while (!pins.begin(0)) { // Address 0 or 1, depending on your addr-pin
+    	Serial.println("TCA6416A not found");
+		delay(1000);
+	}
 
 	pins.pin_mode(0, OUTPUT);
 	pins.pin_mode(1, INPUT);
