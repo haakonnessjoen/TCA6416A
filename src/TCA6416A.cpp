@@ -4,12 +4,21 @@
 #include "TCA6416A.h"
 
 // NB!: Only address 0 or 1
-void TCA6416A::begin(uint8_t address) {
-	i2caddr = 0x20 | address;
-	TW.begin();
+bool TCA6416A::begin(uint8_t addr_pin, TwoWire *theWire) {
+	i2caddr = 0x20 | addr_pin;
+	TW = theWire;
+	TW->begin();
+
+	/// Check if device is connected
+	TW->beginTransmission((int)i2caddr);
+	if (TW->endTransmission() != 0) {
+		return false;
+	}
 
 	port_read();
 	mode_read();
+
+	return true;
 }
 
 void TCA6416A::pin_write(uint8_t pinNum, uint8_t level) {
@@ -49,51 +58,51 @@ int TCA6416A::pin_read(uint8_t pinNum) {
 }
 
 void TCA6416A::port_write(uint16_t i2cportval) {
-	TW.beginTransmission((int)i2caddr);
-	TW.write(TCAREG_OUTPUT0);
+	TW->beginTransmission((int)i2caddr);
+	TW->write(TCAREG_OUTPUT0);
 
-	TW.write(i2cportval & 0x00FF);
-	TW.write(i2cportval >> 8 );
+	TW->write(i2cportval & 0x00FF);
+	TW->write(i2cportval >> 8 );
 
-	TW.endTransmission();
+	TW->endTransmission();
 
 	pinState = i2cportval;
 }
 
 uint16_t TCA6416A::port_read() {
-	TW.beginTransmission((int)i2caddr);
-	TW.write(TCAREG_INPUT0);
-	TW.endTransmission();
+	TW->beginTransmission((int)i2caddr);
+	TW->write(TCAREG_INPUT0);
+	TW->endTransmission();
 
-	TW.requestFrom((int)i2caddr, (int)i2cwidth);
+	TW->requestFrom((int)i2caddr, (int)i2cwidth);
 
-	pinState = TW.read();
-	pinState |= TW.read() << 8;
+	pinState = TW->read();
+	pinState |= TW->read() << 8;
 
 	return pinState;
 }
 
 void TCA6416A::mode_write(uint16_t modes) {
-	TW.beginTransmission((int)i2caddr);
-	TW.write(TCAREG_CONFIG0);
+	TW->beginTransmission((int)i2caddr);
+	TW->write(TCAREG_CONFIG0);
 
-	TW.write(modes & 0x00FF);
-	TW.write(modes >> 8 );
+	TW->write(modes & 0x00FF);
+	TW->write(modes >> 8 );
 
-	TW.endTransmission();
+	TW->endTransmission();
 
 	pinModes = modes;
 }
 
 uint16_t TCA6416A::mode_read() {
-	TW.beginTransmission((int)i2caddr);
-	TW.write(TCAREG_CONFIG0);
-	TW.endTransmission();
+	TW->beginTransmission((int)i2caddr);
+	TW->write(TCAREG_CONFIG0);
+	TW->endTransmission();
 
-	TW.requestFrom((int)i2caddr, (int)i2cwidth);
+	TW->requestFrom((int)i2caddr, (int)i2cwidth);
 
-	pinModes = TW.read();
-	pinModes |= TW.read() << 8;
+	pinModes = TW->read();
+	pinModes |= TW->read() << 8;
 
 	return pinModes;
 }
