@@ -33,11 +33,11 @@ public:
 	uint16_t mode_read();
 
 private:
-		TwoWire TW;
+	TwoWire TW;
     uint8_t i2caddr;
     uint8_t i2cwidth;
-		uint16_t pinState;
-		uint16_t pinModes;
+	uint16_t pinState;
+	uint16_t pinModes;
 };
 
 #endif // TCA6416A_H

@@ -6,6 +6,7 @@
 // NB!: Only address 0 or 1
 void TCA6416A::begin(uint8_t address) {
 	i2caddr = 0x20 | address;
+	i2cwidth = 2;
 	TW.begin();
 
 	port_read();
@@ -61,14 +62,17 @@ void TCA6416A::port_write(uint16_t i2cportval) {
 }
 
 uint16_t TCA6416A::port_read() {
+	uint16_t tempInput;
 	TW.beginTransmission((int)i2caddr);
 	TW.write(TCAREG_INPUT0);
 	TW.endTransmission();
 
 	TW.requestFrom((int)i2caddr, (int)i2cwidth);
 
-	pinState = TW.read();
-	pinState |= TW.read() << 8;
+	tempInput = TW.read();
+	tempInput |= TW.read() << 8;
+
+	pinState = (pinState & ~pinModes) | (tempInput & pinModes);
 
 	return pinState;
 }
